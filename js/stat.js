@@ -59,16 +59,12 @@ function drawChart(ctx, names, times) {
     var columnY = FIRST_COLUMN_Y - columnHeight;
     var timeY = columnY - 5;
     var nameY = columnY + columnHeight + 15;
-    var color = (names[i] === 'Вы') ? SELF_COLOR : getRandomColumnColor();
+    var color = (names[i] === 'Вы') ? SELF_COLOR : 'rgba(0, 0, 255, ' + Math.random().toFixed(2) + ')';
 
     drawText(ctx, parseInt(times[i], 10), columnX, timeY);
     drawText(ctx, names[i], columnX, nameY);
     drawRectangle(ctx, columnX, columnY, COLUMN_WIDTH, columnHeight, color);
   }
-}
-
-function getRandomColumnColor() {
-  return 'rgba(0, 0, 255, ' + Math.random().toFixed(2) + ')';
 }
 
 function getMaxElement(arr) {
