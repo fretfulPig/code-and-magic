@@ -15,21 +15,15 @@ window.renderStatistics = function (ctx, names, times) {
     color: 'rgba(0, 0, 0, 0.7)'
   };
 
-  var Message = {
-    TEXT: 'Ура вы победили!\nСписок результатов:',
-    FONT_FAMILY: 'PT Mono',
-    FONT_SIZE: 16,
-    COLOR: '#000000'
-  };
-
   drawHexagon(ctx, shadow.color, shadow.x, shadow.y);
   drawHexagon(ctx, Cloud.COLOR, Cloud.X, Cloud.Y);
-  drawText(ctx, Message);
+  drawText(ctx, 'Ура вы победили!', 220, 40);
+  drawText(ctx, 'Список результатов:', 220, 60);
   drawChart(ctx, names, times);
 };
 
 function drawHexagon(ctx, color, x, y) {
-  ctx.fillStyle = color;
+  ctx.fillStyle = color || '#000000';
   ctx.beginPath();
   ctx.moveTo(30 + x, 30 + y);
   ctx.lineTo(210 + x, 0 + y);
@@ -43,15 +37,10 @@ function drawHexagon(ctx, color, x, y) {
   ctx.closePath();
 }
 
-function drawText(ctx, Message) {
-  var strings = Message.TEXT.split('\n');
-
-  ctx.fillStyle = Message.COLOR;
-  ctx.font = Message.FONT_SIZE + 'px' + Message.FONT_FAMILY;
-
-  for (var i = 0, y = Message.FONT_SIZE + 25; i < strings.length; i++, y += Message.FONT_SIZE) {
-    ctx.fillText(strings[i], 220, y);
-  }
+function drawText(ctx, message, x, y, font, color) {
+  ctx.fillStyle = color || '#000000';
+  ctx.font = font || '16px PT Mono';
+  ctx.fillText(message, x, y);
 }
 
 function drawChart(ctx, names, times) {
@@ -68,9 +57,13 @@ function drawChart(ctx, names, times) {
     var columnHeight = times[i] * columnHeightStep;
     var columnX = FIRST_COLUMN_X + (MARGIN + COLUMN_WIDTH) * i;
     var columnY = FIRST_COLUMN_Y - columnHeight;
+    var timeY = columnY - 5;
+    var nameY = columnY + columnHeight + 15;
     var color = (names[i] === 'Вы') ? SELF_COLOR : getRandomColumnColor();
 
-    drawColumn(ctx, color, columnX, columnY, COLUMN_WIDTH, columnHeight, times[i], names[i]);
+    drawText(ctx, parseInt(times[i], 10), columnX, timeY);
+    drawText(ctx, names[i], columnX, nameY);
+    drawRectangle(ctx, columnX, columnY, COLUMN_WIDTH, columnHeight, color);
   }
 }
 
@@ -90,10 +83,7 @@ function getMaxElement(arr) {
   return maxElement;
 }
 
-function drawColumn(ctx, color, x, y, width, height, time, name) {
-  ctx.fillStyle = color;
+function drawRectangle(ctx, x, y, width, height, color) {
+  ctx.fillStyle = color || '#000000';
   ctx.fillRect(x, y, width, height);
-  ctx.fillStyle = '#000';
-  ctx.fillText(parseInt(time, 10), x, y - 5);
-  ctx.fillText(name, x, y + height + 15);
 }
